@@ -38,6 +38,17 @@ contract TwoUserMultisig is IAccount, IERC1271 {
         owner2 = _owner2;
     }
 
+    function createTransaction() public pure returns (bytes memory) {
+        address to = 0x1234567890123456789012345678901234567890;
+        uint256 value = 100 ether;
+        bytes memory data = abi.encodeWithSignature("myFunction(uint256)", 123);
+        uint256 nonce = 0;
+        uint256 gasPrice = 100 gwei;
+        uint256 gasLimit = 100000;
+        
+        return abi.encode(to, value, data, nonce, gasPrice, gasLimit);
+    }
+
     function validateTransaction(
         bytes32,
         bytes32 _suggestedSignedHash,
