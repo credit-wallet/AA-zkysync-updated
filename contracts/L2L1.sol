@@ -1,4 +1,5 @@
-//L2 Contract ---------------
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
  interface IL1Messenger {
     // Possibly in the future we will be able to track the messages sent to L1 with
@@ -9,7 +10,6 @@
     }
 
 contract L2Contract {
-
 
     IL1Messenger constant L1_MESSENGER_CONTRACT = IL1Messenger("0x1234567890123456789012345678901234567890");
 
