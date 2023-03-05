@@ -15,8 +15,8 @@ module.exports = {
       zksync: true,
     },
     zkSyncTestnet: {
-      url: 'http://localhost:3050/',
-      ethNetwork: 'http://localhost:8545/', // Can also be the RPC URL of the network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
+      url: 'https://zksync2-testnet.zksync.dev',
+      ethNetwork: 'goerli', // Can also be the RPC URL of the network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
       zksync: true,
     },
   },
