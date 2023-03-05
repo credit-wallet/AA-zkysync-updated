@@ -14,8 +14,9 @@ import "@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol";
 // to call non-view method of system contracts
 import "@matterlabs/zksync-contracts/l2/system-contracts/libraries/SystemContractsCaller.sol";
 
-//Huma credit pool interface
-import "../interface/ICredit.sol";
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "../interfaces/ICredit.sol";
 
 contract TwoUserMultisig is IAccount, IERC1271 {
     // to get transaction hash
@@ -23,8 +24,13 @@ contract TwoUserMultisig is IAccount, IERC1271 {
 
     // state variables for account owners
     address public owner1;
+    //owner2 = guarantor optional if 
     address public owner2;
     address public humaPool;
+    //keep track of guarantees
+    mapping (bytes32=> uint256) guarantees;
+    
+
 
     bytes4 constant EIP1271_SUCCESS_RETURN_VALUE = 0x1626ba7e;
 
@@ -42,11 +48,8 @@ contract TwoUserMultisig is IAccount, IERC1271 {
         owner2 = _owner2;
     }
 
-    function requestBorrow(uint256 amount)internal{
-        //TODO: add receiver later
-        ICredit creditPool = ICredit(humaPool);
-        creditPool.drawdown(amount);
-    }
+
+
 
     function validateTransaction(
         bytes32,
@@ -55,6 +58,17 @@ contract TwoUserMultisig is IAccount, IERC1271 {
     ) external payable override onlyBootloader returns (bytes4 magic) {
         magic = _validateTransaction(_suggestedSignedHash, _transaction);
     }
+
+
+    function requestBorrow(uint256 amount)external{
+        ICredit creditPool = ICredit(humaPool);
+        creditPool.drawdown(amount);
+    }
+
+    function changePoolAddr(address _newAddr)external{
+        humaPool = _newAddr;
+    }
+
 
     function _validateTransaction(
         bytes32 _suggestedSignedHash,
